@@ -49,7 +49,17 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
     return {};
 }
 
-// void load_words(set<string> & word_list, const string& file_name);
+void load_words(set<string> & word_list, const string& file_name)
+{
+    ifstream file(file_name);
+    if (file.is_open()) {
+        string line;
+        while (getline(file, line))
+            word_list.insert(line);
+        file.close();
+    }
+    cout << "Unable to open file" << endl;
+}
 
 // void print_word_ladder(const vector<string>& ladder);
 // void verify_word_ladder();

@@ -5,7 +5,7 @@ int main()
     string word1, word2;
     cout << "Enter word 1: ";
     cin >> word1;
-    cout << "\nEnter word 2: ";
+    cout << "Enter word 2: ";
     cin >> word2;
     if (word1 == word2) {
         error(word1, word2, "words are the same");
