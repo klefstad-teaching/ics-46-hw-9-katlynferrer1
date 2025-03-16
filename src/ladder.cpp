@@ -7,21 +7,37 @@ void error(string word1, string word2, string msg)
 
 
 // compares words to see if they are neighbors
-// bool edit_distance_within(const std::string& str1, const std::string& str2, int d);
-// {
+bool edit_distance_within(const std::string& str1, const std::string& str2, int d)
+{
+    if (max(str1.length(), str2.length()) - min(str1.length(), str2.length()) > d) return false;
 
-// }
+    int letter_dif = 0;
+    int i = 0, j = 0;
+
+    while ((i < str1.length()) && (j < str2.length())) {
+        if (str1[i] != str2[j]) {
+            letter_dif++;
+            
+            if (str1.length() > str2.length()) i++;
+            else if (str1.length() < str2.length()) j++;
+            else {
+                i++;
+                j++;
+            }
+        }
+        else {
+            i++;
+            j++;
+        }
+    }
+    return letter_dif == d;
+}
 
 // examines ladders that are one step away from original word
 // returns true if two words are neighbors (word differs by exactly one letter)
 bool is_adjacent(const string& word1, const string& word2)
 {
-    int letter_dif = 0;
-    longer_word = max(word1, word2);
-    for (int i = 0; i <= longer_word.length(); ++i)
-        if (letter_dif > 1) return false;
-        if (word1[i] != word2[i]) letter_dif += 1;
-    return letter_dif == 1; 
+    return edit_distance_within(word1, word2, 1);
 }
 
 vector<string> generate_word_ladder(const string& begin_word, const string& end_word, const set<string>& word_list)
@@ -73,4 +89,4 @@ void print_word_ladder(const vector<string>& ladder)
     cout << endl;
 }
 
-// void verify_word_ladder();
+void verify_word_ladder();
