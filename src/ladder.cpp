@@ -16,7 +16,12 @@ void error(string word1, string word2, string msg)
 // returns true if two words are neighbors (word differs by exactly one letter)
 bool is_adjacent(const string& word1, const string& word2)
 {
-    return true;
+    int letter_dif = 0;
+    longer_word = max(word1, word2);
+    for (int i = 0; i <= longer_word.length(); ++i)
+        if (letter_dif > 1) return false;
+        if (word1[i] != word2[i]) letter_dif += 1;
+    return letter_dif == 1; 
 }
 
 vector<string> generate_word_ladder(const string& begin_word, const string& end_word, const set<string>& word_list)
