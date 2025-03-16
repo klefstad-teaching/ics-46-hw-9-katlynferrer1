@@ -61,5 +61,11 @@ void load_words(set<string> & word_list, const string& file_name)
     cout << "Unable to open file" << endl;
 }
 
-// void print_word_ladder(const vector<string>& ladder);
+void print_word_ladder(const vector<string>& ladder)
+{
+    for (string w : ladder)
+        cout << w << " -> ";
+    cout << endl;
+}
+
 // void verify_word_ladder();
