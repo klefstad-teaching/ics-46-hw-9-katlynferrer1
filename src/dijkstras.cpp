@@ -12,7 +12,7 @@ struct Graph {
     vector<vector<int>> adjacencyList;
     vector<int> distance;
     vector<int> previous;
-    vector<int> visited;
+    vector<bool> visited;
 }
 
 void dijkstra(int source, Graph& graph) {
@@ -54,7 +54,20 @@ vector<int> dijkstra_shortest_path(const Graph& G, int source, vector<int>& prev
     return G.distance;
 }
 
-// vector<int> extract_shortest_path(const vector<int>& /*distances*/, const vector<int>& previous, int destination);
+vector<int> extract_shortest_path(const vector<int>& /*distances*/, const vector<int>& previous, int destination)
+{
+    stack<int> s;
+    for (int v = destination; v != -1; v = previous[v])
+        s.push(v);
+
+    vector<int> p;
+    while (!s.empty()) {
+        p.push_back(s.top());
+        s.pop();
+    }
+    return path;
+}
+
 void print_path(const vector<int>& v, int total)
 {
     for (int e : v)
