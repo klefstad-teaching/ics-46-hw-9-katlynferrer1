@@ -9,8 +9,8 @@ void error(string word1, string word2, string msg)
 // compares words to see if they are neighbors
 bool edit_distance_within(const std::string& str1, const std::string& str2, int d)
 {
-    l1 = str1.length();
-    l2 = str2.length();
+    int l1 = str1.length();
+    int l2 = str2.length();
     if abs(l1 - sl2) return false;
 
     int i = 0, j = 0;
