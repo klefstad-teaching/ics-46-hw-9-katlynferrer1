@@ -1,60 +1,42 @@
 #include "dijkstras.h"
 
-struct Node {
-    int vertex = 0;
-    int weight = 0;
+vector<int> dijkstra_shortest_path(const Graph& G, int source, vector<int>& previous)
+{
+    int numVertices = G.size();
+    vector<int> distances(numVertices, INF);
+    vector<bool> visited(numVertices, false);
+    distances[source] = 0;
+    previous[source] = -1;
 
-    Node(int v, int w) : vertex(v), weight(w) {}
-};
+    struct MinHeap {
+        bool operator() (const pair<int, int> &a, const pair<int, int>&b) {
+            return a.second > b.second;
+        }
+    };
 
+    priority_queue<pair<int,int>, vector<pair<int, int>>, MinHeap> minHeap;
+    minHeap.push({source, 0});
+    while (!minHeap.empty()) {
+        int u = minHeap.top().first;
+        minHeap.pop();
 
-struct Graph {
-    vector<vector<int>> adjacencyList;
-    vector<int> distance;
-    vector<int> previous;
-    vector<bool> visited;
-}
+        if (visited[u]) continue;
+        visited[u] = true;
 
-void dijkstra(int source, Graph& graph) {
-    int n = graph.adjacencyList.size();
-
-    graph.distance.resize(n, INT_MAX);
-    graph.previous.resize(n, -1);
-    graph.visited.resize(n, false);
-
-    priority_queue<int> pq;
-    pq.push(Node(source, 0));
-    graph.distance[source] = 0;
-
-    while (!pq.empty()) {
-        Node current = pq.top();
-        pq.pop();
-        
-        int u = current.vertex;
-
-        if (graph.visited[u]) continue;
-        graph.visited[u] = true;
-
-        for (Node& neighbor : graph.adjacencyList[u]) {
-            int v = neighbor.vertex;
-            int weight = neighbor.weight;
-
-            if  (!graph.visited[v] && (graph.distance[u] + weight < graph.distance[v])) {
-                graph.distance[v] = graph.distance[u] + weight;
-                graph.previous[v] = u;
-                pq.push(Node(v, graph.distance[v]));
+        for (Edge e : G[u]) {
+            int v = e.dst;
+            int weight = e.weight;
+            if (!visited[v] && distances[u] + weight < distances[v]) {
+                distances[v] = distances[u] + weight;
+                previous[v] = u;
+                minHeap.push({v, distances[v]});
             }
         }
     }
+    return distances;
 }
 
-vector<int> dijkstra_shortest_path(const Graph& G, int source, vector<int>& previous)
-{
-    dijkstra(source, G);
-    return G.distance;
-}
-
-vector<int> extract_shortest_path(const vector<int>& /*distances*/, const vector<int>& previous, int destination)
+vector<int> extract_shortest_path(const vector<int>& distances, const vector<int>& previous, int destination)
 {
     stack<int> s;
     for (int v = destination; v != -1; v = previous[v])
@@ -65,13 +47,13 @@ vector<int> extract_shortest_path(const vector<int>& /*distances*/, const vector
         p.push_back(s.top());
         s.pop();
     }
-    return path;
+    return p;
 }
 
 void print_path(const vector<int>& v, int total)
 {
     for (int e : v)
         cout << e << " ";
-    cout << "\ntotal: " << total << endl;
+    cout << "\nTotal cost is " << total << endl;
 }
 
