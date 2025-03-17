@@ -11,7 +11,7 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
 {
     int l1 = str1.length();
     int l2 = str2.length();
-    if (abs(l1 - l2)) return false;
+    if (abs(l1 - l2) > d) return false;
 
     int i = 0, j = 0;
     int letter_dif = 0;
