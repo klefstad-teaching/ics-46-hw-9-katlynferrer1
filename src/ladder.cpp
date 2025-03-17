@@ -9,19 +9,21 @@ void error(string word1, string word2, string msg)
 // compares words to see if they are neighbors
 bool edit_distance_within(const std::string& str1, const std::string& str2, int d)
 {
-    if (max(str1.length(), str2.length()) - min(str1.length(), str2.length()) > d) return false;
+    l1 = str1.length();
+    l2 = str2.length();
+    if abs(l1 - sl2) return false;
 
     int i = 0, j = 0;
     int letter_dif = 0;
 
-    while (i < str1.length() && j < str2.length()) {
+    while (i < l1 && j < l2) {
         if (str1[i] != str2[j]) {
             letter_dif++;
             
             if (letter_dif > d) return false;
 
-            if (str1.length() > str2.length()) i++;
-            else if (str1.length() < str2.length()) j++;
+            if (l1 > l2) i++;
+            else if (l1 < l2) j++;
             else {
                 i++;
                 j++;
@@ -32,8 +34,8 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
             j++;
         }
     }
-    letter_dif += max(str1.length() - i, str2.length() - j);
-    return letter_dif == d;
+    if (i < l1 || j < l2) letter_dif++;
+    return letter_dif <= d;
 }
 
 // examines ladders that are one step away from original word
@@ -70,7 +72,6 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
             }
         }
     }
-    error(begin_word, end_word, "no ladder found");
     return {};
 }
 
