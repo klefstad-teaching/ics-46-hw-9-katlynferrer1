@@ -11,13 +11,15 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
 {
     if (max(str1.length(), str2.length()) - min(str1.length(), str2.length()) > d) return false;
 
-    int letter_dif = 0;
     int i = 0, j = 0;
+    int letter_dif = 0;
 
-    while ((i < str1.length()) && (j < str2.length())) {
+    while (i < str1.length() && j < str2.length()) {
         if (str1[i] != str2[j]) {
             letter_dif++;
             
+            if (letter_dif > d) return false;
+
             if (str1.length() > str2.length()) i++;
             else if (str1.length() < str2.length()) j++;
             else {
@@ -30,6 +32,7 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
             j++;
         }
     }
+    letter_dif += max(str1.length() - i, str2.length() - j);
     return letter_dif == d;
 }
 
@@ -60,6 +63,7 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
                     vector<string> new_ladder = ladder;
                     new_ladder.push_back(word);
                     if (word == end_word)
+                        //print_word_ladder(new_ladder);
                         return new_ladder;
                     ladder_queue.push(new_ladder);
                 }
@@ -78,8 +82,10 @@ void load_words(set<string> & word_list, const string& file_name)
         while (getline(file, line))
             word_list.insert(line);
         file.close();
+    } 
+    else {
+        cout << "Unable to open file" << endl;
     }
-    cout << "Unable to open file" << endl;
 }
 
 void print_word_ladder(const vector<string>& ladder)
@@ -89,4 +95,17 @@ void print_word_ladder(const vector<string>& ladder)
     cout << endl;
 }
 
-void verify_word_ladder();
+#define my_assert(e) {cout << #e << ((e) ? "passed": "failed") << endl;}
+void verify_word_ladder()
+{
+    set<string> word_list;
+    load_words(word_list, "src/words.txt");
+
+    my_assert(generate_word_ladder("cat", "dog", word_list).size() == 4);
+    my_assert(generate_word_ladder("marty", "curls", word_list).size() == 6);
+    my_assert(generate_word_ladder("code", "data", word_list).size() == 6);
+    my_assert(generate_word_ladder("work", "play", word_list).size() == 6);
+    my_assert(generate_word_ladder("sleep", "awake", word_list).size() == 8);
+    my_assert(generate_word_ladder("car", "cheat", word_list).size() == 4);
+
+}
